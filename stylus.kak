@@ -11,21 +11,21 @@ hook global BufCreate .*[.](styl) %{
 # Highlighters
 # ‾‾‾‾‾‾‾‾‾‾‾‾
 
-add-highlighter -group / regions -default code stylus \
+add-highlighter shared/ regions -default code stylus \
     string  '"' (?<!\\)(\\\\)*"        '' \
     string  "'" "'"                    '' \
     comment //  '$'                    '' \
     comment /\* \*/                    ''
 
-add-highlighter -group /stylus/string  fill string
-add-highlighter -group /stylus/comment fill comment
+add-highlighter shared/stylus/string  fill string
+add-highlighter shared/stylus/comment fill comment
 
-add-highlighter -group /stylus/code regex [*]|[#.][A-Za-z][A-Za-z0-9_-]* 0:variable
-add-highlighter -group /stylus/code regex &|@[A-Za-z][A-Za-z0-9_-]* 0:meta
-add-highlighter -group /stylus/code regex (#[0-9A-Fa-f]+)|((\d*\.)?\d+(em|px)) 0:value
-add-highlighter -group /stylus/code regex ([A-Za-z][A-Za-z0-9_-]*)\h*: 1:keyword
-add-highlighter -group /stylus/code regex :(before|after) 0:attribute
-add-highlighter -group /stylus/code regex !important 0:keyword
+add-highlighter shared/stylus/code regex [*]|[#.][A-Za-z][A-Za-z0-9_-]* 0:variable
+add-highlighter shared/stylus/code regex &|@[A-Za-z][A-Za-z0-9_-]* 0:meta
+add-highlighter shared/stylus/code regex (#[0-9A-Fa-f]+)|((\d*\.)?\d+(em|px)) 0:value
+add-highlighter shared/stylus/code regex ([A-Za-z][A-Za-z0-9_-]*)\h*: 1:keyword
+add-highlighter shared/stylus/code regex :(before|after) 0:attribute
+add-highlighter shared/stylus/code regex !important 0:keyword
 
 # Commands
 # ‾‾‾‾‾‾‾‾
@@ -51,14 +51,14 @@ def -hidden stylus-indent-on-new-line %{
 # Initialization
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 
-hook -group stylus-highlight global WinSetOption filetype=stylus %{ add-highlighter ref stylus }
+hook -group stylus-highlight global WinSetOption filetype=stylus %{ add-highlighter window ref stylus }
 
 hook global WinSetOption filetype=stylus %{
     hook window InsertEnd  .* -group stylus-hooks  stylus-filter-around-selections
     hook window InsertChar \n -group stylus-indent stylus-indent-on-new-line
 }
 
-hook -group stylus-highlight global WinSetOption filetype=(?!stylus).* %{ remove-highlighter stylus }
+hook -group stylus-highlight global WinSetOption filetype=(?!stylus).* %{ remove-highlighter window/stylus }
 
 hook global WinSetOption filetype=(?!stylus).* %{
     remove-hooks window stylus-indent
